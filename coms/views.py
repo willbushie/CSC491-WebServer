@@ -14,31 +14,11 @@ from rest_framework.views import APIView
 from rest_framework import status, mixins, generics
 from coms import serializers
 
-
-""" @api_view(['GET'])
-def api_overview(request):
-    client_get_urls = {
-        'List of grouped members':'/api/groups/<int:id>/members/',
-        'List of members current IPs':'/api/groups/<int:id>/ips/',
-        'List of shareables files':'/api/groups/<int:id>/files/',
-        'Group member current IP':'/api/groups/<int:id>/members/<int:uid>/ip/',
-        'Group member files list':'/api/groups/<int:id>/members/<int:uid>/files/',
-    }
-
-    client_post_urls = {
-        'New shareable file':'/api/groups/<int:id>/newfile/',
-        'IP address change':'/api/groups/<int:id>/ipupdate/',
-        'New group creation':'/api/groups/new/'
-    }
-
-    return JsonResponse({'GET':client_get_urls,'POST':client_post_urls}) """
-
 class UsersView(APIView):
 
     def get(self,request,format=None):
         """
-        Get methods for the users table:
-        - Return all users information from user table
+        Get method to obtain all users in the User table.
         """
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
@@ -46,50 +26,37 @@ class UsersView(APIView):
 
 class UserView(APIView):
 
-    def get(self,request,uid,format=None):
+    def get(self,uid,format=None):
         """
-        Get methods for the user table:
-        - Return all user info given the user uid
+        Get methods to obtain all information on a specific user (based on uid).
         """
         user = User.objects.get(uid=uid)
         serializer = UserSerializer(user)
         return JsonResponse(serializer.data)
 
-    def post(self,request,action='create',uid=None,format=None):
+    def post(self,request,format=None):
         """
-        Post methods to the user table:
-        - create: create a new user in the database
-        - update_ip: update a user's last_known_ip & last_seen values
-        - deactivate: update a user's deactivate & last_seen values
+        Post methods to create a new user
         """
         input = JSONParser().parse(request)
-        if action != 'create':
-            user = User.objects.get(uid=uid)
+        serializer = UserSerializer(data = input)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)            
 
-        # udpate user last_known_ip & last_seen values
-        if action == 'update_ip':
-            serializer = UserSerializer(user,data=input,partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
-            return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
-        # update user _deactivated & last_seen values
-        elif action == 'deactivate':
-            serializer = UserSerializer(user,data=input,partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
-        # create new user in the database (all feilds required, else an error occurs)
-        elif action == 'create':
-            serializer = UserSerializer(data = input)
+    def put(self,request,uid,format=None):
+        """
+        Put method to modify a user's information (based on uid).
+        """
+        input = JSONParser().parse(request)
+        user = User.objects.get(uid=uid)
+        serializer = UserSerializer(user,data=input,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
 
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
-        # produce an error
-        else:
-            return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
-            
 class GroupsView(APIView):
     
     def get(self,request,format=None):
@@ -106,59 +73,36 @@ class GroupsView(APIView):
 class GroupView(APIView):
     
     def get(self,request,id,format=None):
-        pass
-
-    def post(self,request,id,action='create',format=None):
         """
-        Post methods for the group table:
-        - create: create a new group
-        - 
+        Get method for a particular group (based on group id).
+        - Returns all group information
+        """
+        group = User.objects.get(id=id)
+        serializer = UserSerializer(group)
+        return JsonResponse(serializer.data)
+
+    def post(self,request,format=None):
+        """
+        Post methods to create a new group.
         """
         input = JSONParser().parse(request)
-        if action != 'create':
-            group = Group.objects.get(id=id)
+        serializer = GroupSerializer(data = input)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
 
-        # udpate group users w/new user & last_updated values
-        if action == 'add_user':
-            serializer = GroupSerializer(group,data=input,partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
-            return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
-            
-
-
-        # udpate group files w/new file & last_updated values
-        if action == 'new_file':
-            serializer = GroupSerializer(group,data=input,partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
-            return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
-        # update group time_period & last_updated values
-        if action =='update_time_period':
-            serializer = GroupSerializer(group,data=input,partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
-            return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
-        # udpate group active & last_updated values
-        elif action == 'deactivate':
-            serializer = GroupSerializer(group,data=input,partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
-        # create new group in the database (all feilds required, else an error occurs)
-        elif action == 'create':
-            serializer = GroupSerializer(data = input)
-
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
-        # produce an error
-        else:
-            return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
-
+    def put(self,request,id,format=None):
+        """
+        Put method to modify an existing group.
+        """
+        input = JSONParser().parse(request)
+        group = Group.objects.get(id=id)
+        serializer = GroupSerializer(group,data=input,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data,status = status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
 
 class FileView(APIView):
     
@@ -166,4 +110,7 @@ class FileView(APIView):
         pass
 
     def post(self,request,format=None):
+        pass
+
+    def put(self,request,format=None):
         pass

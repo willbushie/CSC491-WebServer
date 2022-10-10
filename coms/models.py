@@ -12,8 +12,9 @@ class User(models.Model):
 
     # fields
     uid = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False,unique=True)
-    email = models.CharField(max_length = 200)
+    email = models.CharField(max_length = 100)
     password = models.CharField(max_length = 30) # this needs to be changed once real password management is implemented
+    username = models.CharField(max_length = 30)
     account_creation = models.DateTimeField(default=now,blank=True,editable=False)
     last_seen = models.DateTimeField(auto_now=True,blank=True)
     last_known_ip = models.GenericIPAddressField()
@@ -37,9 +38,9 @@ class Group(models.Model):
 
     # fields
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False,unique=True)
-    users = models.ManyToManyField(User)
-    share_link = models.URLField(max_length=200,default=f'http://127.0.0.1:8000/api/group/{id}/join/')
-    files = models.ManyToManyField(File,blank=True)
+    users = models.ForeignKey(User,blank=True,on_delete=models.CASCADE,null=True)
+    share_link = models.URLField(max_length=200,default=f'http://127.0.0.1:8000/api/group/{id}/join/',blank=True,null=True)
+    files = models.ForeignKey(File,blank=True,on_delete=models.CASCADE,null=True)
     time_period = models.DurationField(default=timedelta(hours=1))
     creation = models.DateTimeField(default=now,blank=True,editable=False)
     last_updated = models.DateTimeField(auto_now=True,blank=True)

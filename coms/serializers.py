@@ -8,6 +8,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'uid',
             'email',
             'password',
+            'username',
             'account_creation',
             'last_seen',
             'last_known_ip',
