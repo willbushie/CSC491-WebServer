@@ -38,9 +38,9 @@ class Group(models.Model):
 
     # fields
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False,unique=True)
-    users = models.ForeignKey(User,blank=True,on_delete=models.CASCADE,null=True)
-    share_link = models.URLField(max_length=200,default=f'http://127.0.0.1:8000/api/group/{id}/join/',blank=True,null=True)
-    files = models.ForeignKey(File,blank=True,on_delete=models.CASCADE,null=True)
+    users = models.ForeignKey(User,blank=True,on_delete=models.CASCADE)
+    #share_link = models.URLField(max_length=200,default=f'http://127.0.0.1:8000/api/group/{id}/join/',blank=True)
+    files = models.ForeignKey(File,blank=True,on_delete=models.CASCADE)
     time_period = models.DurationField(default=timedelta(hours=1))
     creation = models.DateTimeField(default=now,blank=True,editable=False)
     last_updated = models.DateTimeField(auto_now=True,blank=True)

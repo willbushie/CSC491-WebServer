@@ -40,7 +40,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'id',
             'users',
-            'share_link',
+            #'share_link',
             'files',
             'time_period',
             'creation',

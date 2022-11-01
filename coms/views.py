@@ -1,10 +1,6 @@
-from functools import partial
 from urllib.error import HTTPError
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-
-
-
 from rest_framework.parsers import JSONParser
 from coms.models import User, Group, File
 from .serializers import UserSerializer, GroupSerializer, FileSerializer
