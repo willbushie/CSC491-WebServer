@@ -7,12 +7,10 @@ LAST MODIFIED: 2022-11-21 by William Bushie
 """
 
 # imports
-
-from .serializers import CustomTokenObtainPairSerializer
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.models import User
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer, ChangePasswordSerializer, CustomTokenObtainPairSerializer, UpdateUserSerializer
 from rest_framework import generics
 
 class CustomObtainTokenPairView(TokenObtainPairView):
@@ -29,3 +27,19 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+
+class ChangePasswordView(generics.UpdateAPIView):
+    """
+    Update a user's password.
+    """
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
+
+class UpdateProfileView(generics.UpdateAPIView):
+    """
+    Update portions of a user's profile.
+    """
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UpdateUserSerializer
