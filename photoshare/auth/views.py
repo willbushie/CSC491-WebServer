@@ -7,18 +7,15 @@ LAST MODIFIED: 2022-11-21 by William Bushie
 """
 
 # imports
+from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
-from .serializers import RegisterSerializer, ChangePasswordSerializer, CustomTokenObtainPairSerializer, UpdateUserSerializer
+from .serializers import RegisterSerializer, ChangePasswordSerializer, UpdateUserSerializer
 from rest_framework import generics
-
-class CustomObtainTokenPairView(TokenObtainPairView):
-    """
-    Override of the ObtainTokenPairView from simpleJWT.
-    """
-    permission_classes = (AllowAny,)
-    serializer_class = CustomTokenObtainPairSerializer
 
 class RegisterView(generics.CreateAPIView):
     """
@@ -43,3 +40,20 @@ class UpdateProfileView(generics.UpdateAPIView):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = UpdateUserSerializer
+
+class LogoutView(APIView):
+    """
+    Logout a user & blacklist the JWTs.
+    """
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
