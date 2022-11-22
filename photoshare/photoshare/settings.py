@@ -8,9 +8,21 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
+
+
+
+===============================================================================
+
+PhotoShare Settings
+
+
+
+LAST MODIFIED: 2022-11-21 by William Bushie
 """
 
+# imports
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +52,22 @@ INSTALLED_APPS = [
     "rest_framework",
     "groups",
 ]
+
+# Rest Framework
+# Guide (JWT): https://medium.com/django-rest/django-rest-framework-jwt-authentication-94bee36f2af8
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    ],
+}
+
+# JWT Items
+# Guide (JWT): https://medium.com/django-rest/django-rest-framework-jwt-authentication-94bee36f2af8
+SIMPLE_JWT = {
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
+    'ROTATE_REFRESH_TOEKNS': True,
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

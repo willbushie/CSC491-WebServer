@@ -15,10 +15,12 @@ Including another URLconf
 
 ===============================================================================
 
-Routers
+URLs & Routers
 
-Helpful Guide: https://medium.com/django-rest/django-rest-framework-creating-views-and-serializers-b76a96fb6fb7
-Rest API Docs: https://www.django-rest-framework.org/api-guide/viewsets/
+Helpful Guide (Views & Serializers): https://medium.com/django-rest/django-rest-framework-creating-views-and-serializers-b76a96fb6fb7
+Helpful Guide (JWT): https://medium.com/django-rest/django-rest-framework-jwt-authentication-94bee36f2af8
+Rest API Docs (ViewSets): https://www.django-rest-framework.org/api-guide/viewsets/
+Rest API Docs (Routers): https://www.django-rest-framework.org/api-guide/routers/
 
 
 
@@ -30,6 +32,7 @@ from django.contrib import admin
 from django.urls import re_path, include
 from groups.views import GroupViewSet, UserViewSet, FileViewSet, SessionViewSet, ListViewSet
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 # creating router
 router = DefaultRouter()
@@ -42,5 +45,7 @@ router.register(r'list', ListViewSet, basename='list')
 # URL patterns
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
+    re_path(r'^token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    re_path(r'^token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     re_path(r'^', include(router.urls)),
 ]

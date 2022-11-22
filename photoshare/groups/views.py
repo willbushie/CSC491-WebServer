@@ -26,6 +26,7 @@ class GroupViewSet(viewsets.ViewSet):
     """
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
+    permission_classes = [IsAuthenticated]
     
     def list(self, request):
         queryset = Group.objects.all()
@@ -48,6 +49,7 @@ class UserViewSet(viewsets.ViewSet):
     """
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         queryset = User.objects.all()
@@ -70,6 +72,7 @@ class FileViewSet(viewsets.ViewSet):
     """
     serializer_class = FileSerializer
     queryset = File.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         queryset = File.objects.all()
@@ -92,6 +95,7 @@ class SessionViewSet(viewsets.ViewSet):
     """
     serializer_class = SessionSerializer
     queryset = Session.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         queryset = Session.objects.all()
@@ -114,6 +118,7 @@ class ListViewSet(viewsets.ViewSet):
     """
     serializer_class = ListSerializer
     queryset = List.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         queryset = List.objects.all()
