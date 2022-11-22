@@ -1,4 +1,4 @@
-"""photoshare URL Configuration
+"""photoshare/auth URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -28,23 +28,13 @@ LAST MODIFIED: 2022-11-21 by William Bushie
 """
 
 # imports
-from django.contrib import admin
-from django.urls import include, path
-from groups.views import GroupViewSet, UserViewSet, FileViewSet, SessionViewSet, ListViewSet
-from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.urls import path
+from auth.views import CustomObtainTokenPairView, RegisterView
+from rest_framework_simplejwt.views import TokenRefreshView
 
-# creating router
-router = DefaultRouter()
-router.register(r'users', UserViewSet, basename='User')
-router.register(r'groups', GroupViewSet, basename='Group')
-router.register(r'files', FileViewSet, basename='File')
-router.register(r'sessions', SessionViewSet, basename='Session')
-router.register(r'list', ListViewSet, basename='List')
 
-# URL patterns
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('auth/', include('auth.urls')),
-    path('', include(router.urls)),
+    path('login/', CustomObtainTokenPairView.as_view(), name='token_obtain_pair'),
+    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('register/', RegisterView.as_view(), name='auth_register'),
 ]
