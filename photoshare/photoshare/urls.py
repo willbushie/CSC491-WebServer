@@ -12,10 +12,35 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import path
 
+===============================================================================
+
+Routers
+
+Helpful Guide: https://medium.com/django-rest/django-rest-framework-creating-views-and-serializers-b76a96fb6fb7
+Rest API Docs: https://www.django-rest-framework.org/api-guide/viewsets/
+
+
+
+LAST MODIFIED: 2022-11-21 by William Bushie
+"""
+
+# imports
+from django.contrib import admin
+from django.urls import re_path, include
+from groups.views import GroupViewSet, UserViewSet, FileViewSet, SessionViewSet, ListViewSet
+from rest_framework.routers import DefaultRouter
+
+# creating router
+router = DefaultRouter()
+router.register(r'users', UserViewSet, basename='user')
+router.register(r'groups', GroupViewSet, basename='group')
+router.register(r'files', FileViewSet, basename='file')
+router.register(r'sessions', SessionViewSet, basename='session')
+router.register(r'list', ListViewSet, basename='list')
+
+# URL patterns
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^', include(router.urls)),
 ]
