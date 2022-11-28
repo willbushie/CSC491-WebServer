@@ -12,6 +12,7 @@ LAST MODIFIED: 2022-11-21 by William Bushie
 from django.contrib.auth.models import User
 from .models import Group, Session, File, List
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -74,3 +75,44 @@ class ListSerializer(serializers.ModelSerializer):
     class Meta:
         model = List
         fields = ['pk', 'file_id', 'owner']
+
+class CreateGroupSerializer(serializers.ModelSerializer):
+    """
+    ### Group Creation Serializer
+
+    """
+
+    start = serializers.DateTimeField(
+            required=True,
+            validators=[UniqueValidator(queryset=User.objects.all())]
+            )
+
+    class Meta:
+        model = Group
+        fields = ('name', 'active', 'duration', 'start', 'end', 'admin', 'join_link')
+        extra_kwargs = {
+            'first_name': {'required': True},
+            'last_name': {'required': True}
+        }
+
+    def create(self, validated_data):
+        """
+        Create a group event.
+        """
+        group = Group.objects.create(
+            name=validated_data[''],
+            active=validated_data[''],
+            duration=validated_data[''],
+            #end=validated_data[''],
+            admin=validated_data[''],
+            #join_link=validated_data['']
+        )
+
+        group.save()
+        return group
+
+class JoinGroupSerializer(serializers.ModelSerializer):
+    """
+    
+    """
+    pass

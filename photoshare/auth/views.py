@@ -7,6 +7,7 @@ LAST MODIFIED: 2022-11-21 by William Bushie
 """
 
 # imports
+import traceback
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -55,5 +56,6 @@ class LogoutView(APIView):
 
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
+            #traceback.print_exc()
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

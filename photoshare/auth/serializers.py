@@ -5,11 +5,10 @@ Guide (Login & Registration): https://medium.com/django-rest/django-rest-framewo
 
 
 
-LAST MODIFIED: 2022-11-21 by William Bushie
+LAST MODIFIED: 2022-11-22 by William Bushie
 """
 
 # imports
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
@@ -49,7 +48,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             last_name=validated_data['last_name']
         )
 
-        
         user.set_password(validated_data['password'])
         user.save()
 

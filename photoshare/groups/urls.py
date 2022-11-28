@@ -1,4 +1,4 @@
-"""photoshare URL Configuration
+"""photoshare/groups URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -28,23 +28,10 @@ LAST MODIFIED: 2022-11-22 by William Bushie
 """
 
 # imports
-from django.contrib import admin
-from django.urls import include, path
-from groups.views import GroupViewSet, UserViewSet, FileViewSet, SessionViewSet, ListViewSet
-from rest_framework.routers import DefaultRouter
+from django.urls import path
+from .views import CreateGroupView, JoinGroupView
 
-# creating router
-router = DefaultRouter()
-router.register(r'users', UserViewSet, basename='User')
-router.register(r'groups', GroupViewSet, basename='Group')
-router.register(r'files', FileViewSet, basename='File')
-router.register(r'sessions', SessionViewSet, basename='Session')
-router.register(r'list', ListViewSet, basename='List')
-
-# URL patterns
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('auth/', include('auth.urls')),
-    path('groups/', include('groups.urls')),
-    path('', include(router.urls)),
+    path('create/', CreateGroupView.as_view(), name='create_group'),
+    path('join/', JoinGroupView.as_view(), name='join_group'),
 ]

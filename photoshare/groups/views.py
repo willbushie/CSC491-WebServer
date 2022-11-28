@@ -5,17 +5,17 @@ Helpful Guide: https://medium.com/django-rest/django-rest-framework-creating-vie
 Rest API Docs: https://www.django-rest-framework.org/api-guide/viewsets/
 
 
-LAST MODIFIED: 2022-11-21 by William Bushie
+LAST MODIFIED: 2022-11-22 by William Bushie
 """
 
 # imports
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .serializers import GroupSerializer, UserSerializer, FileSerializer, SessionSerializer, ListSerializer
+from .serializers import GroupSerializer, UserSerializer, FileSerializer, SessionSerializer, ListSerializer, CreateGroupSerializer, JoinGroupSerializer
 from .models import Group, User, File, Session, List
+from rest_framework import generics
 
 class GroupViewSet(viewsets.ViewSet):
     """
@@ -130,3 +130,23 @@ class ListViewSet(viewsets.ViewSet):
         list = get_object_or_404(queryset, pk=pk)
         serializer = ListSerializer(list)
         return Response(serializer.data)
+
+class CreateGroupView(generics.CreateAPIView):
+    """
+    ### Create Group ViewSet
+
+    """
+    permission_classes = (IsAuthenticated,)
+    queryset = Group.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CreateGroupSerializer
+
+class JoinGroupView(generics.UpdateAPIView):
+    """
+    ### Join Group ViewSet
+
+    """
+    permission_classes = (IsAuthenticated,)
+    queryset = Group.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = JoinGroupSerializer
