@@ -35,7 +35,7 @@ from rest_framework.routers import DefaultRouter
 
 # creating router
 router = DefaultRouter()
-router.register(r'users', UserViewSet, basename='User')
+router.register(r'users', UserViewSet, basename='Users')
 router.register(r'groups', GroupViewSet, basename='Group')
 router.register(r'files', FileViewSet, basename='File')
 router.register(r'sessions', SessionViewSet, basename='Session')

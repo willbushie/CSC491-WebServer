@@ -10,7 +10,7 @@ LAST MODIFIED: 2022-11-22 by William Bushie
 
 # imports
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import viewsets
 from rest_framework.response import Response
 from .serializers import GroupSerializer, UserSerializer, FileSerializer, SessionSerializer, ListSerializer, CreateGroupSerializer, JoinGroupSerializer
@@ -133,20 +133,32 @@ class ListViewSet(viewsets.ViewSet):
 
 class CreateGroupView(generics.CreateAPIView):
     """
-    ### Create Group ViewSet
+    ### Create Group View
 
     """
     permission_classes = (IsAuthenticated,)
     queryset = Group.objects.all()
-    permission_classes = (IsAuthenticated,)
     serializer_class = CreateGroupSerializer
 
 class JoinGroupView(generics.UpdateAPIView):
     """
-    ### Join Group ViewSet
+    ### Join Group View
 
     """
     permission_classes = (IsAuthenticated,)
     queryset = Group.objects.all()
-    permission_classes = (IsAuthenticated,)
     serializer_class = JoinGroupSerializer
+
+class UserSearchView(generics.RetrieveAPIView):
+    """
+    ### User Search View
+    Actions: 
+    - retrieve (GET): Obtains a specified group (based on pk) from the database.
+    """
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated, )
+    
+    def retrieve(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)

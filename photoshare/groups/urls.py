@@ -29,9 +29,10 @@ LAST MODIFIED: 2022-11-22 by William Bushie
 
 # imports
 from django.urls import path
-from .views import CreateGroupView, JoinGroupView
+from .views import CreateGroupView, JoinGroupView, UserSearchView
 
 urlpatterns = [
     path('create/', CreateGroupView.as_view(), name='create_group'),
     path('join/', JoinGroupView.as_view(), name='join_group'),
+    path('user/', UserSearchView.as_view(), name='user_search'),
 ]

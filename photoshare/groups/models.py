@@ -12,6 +12,7 @@ LAST MODIFIED: 2022-11-21 by William Bushie
 # imports
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import timedelta
 
 
 
@@ -37,13 +38,13 @@ class Group(models.Model):
     """
     name = models.CharField(max_length=255)
     active = models.BooleanField(default=False)
-    duration = models.DurationField(default=1)
+    duration = models.DurationField(default=timedelta(hours=1))
     # start is set for when the group is started
     start = models.DateField(auto_now=True)
     # end is set by finding (start + duration)
     end = models.DateField(auto_now=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
-    join_link = models.URLField(default="http://www.photoshare.com/group/join/788") # this needs to be auto generated in some fasion
+    join_link = models.URLField(default=f"http://www.photoshare.com/groups/join/") # this needs to be auto generated in some fasion
 
     def __str__(self):
         return self.name

@@ -82,10 +82,10 @@ class CreateGroupSerializer(serializers.ModelSerializer):
 
     """
 
-    start = serializers.DateTimeField(
+    """ start = serializers.DateTimeField(
             required=True,
             validators=[UniqueValidator(queryset=User.objects.all())]
-            )
+            ) """
 
     class Meta:
         model = Group
@@ -100,14 +100,14 @@ class CreateGroupSerializer(serializers.ModelSerializer):
         Create a group event.
         """
         group = Group.objects.create(
-            name=validated_data[''],
-            active=validated_data[''],
-            duration=validated_data[''],
+            name=validated_data['name'],
+            #active=validated_data[''],
+            #duration=validated_data[''],
             #end=validated_data[''],
-            admin=validated_data[''],
-            #join_link=validated_data['']
+            admin=validated_data['admin'],
+            join_link=""
         )
-
+        group.join_link = f"http://www.photoshare.com/groups/join/{group.pk}/"
         group.save()
         return group
 
