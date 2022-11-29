@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .serializers import GroupSerializer, UserSerializer, FileSerializer, SessionSerializer, ListSerializer, CreateGroupSerializer, JoinGroupSerializer
+from .serializers import GroupSerializer, UserSerializer, FileSerializer, SessionSerializer, ListSerializer, CreateGroupSerializer
 from .models import Group, User, File, Session, List
 from rest_framework import generics
 
@@ -139,15 +139,6 @@ class CreateGroupView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Group.objects.all()
     serializer_class = CreateGroupSerializer
-
-class JoinGroupView(generics.UpdateAPIView):
-    """
-    ### Join Group View
-
-    """
-    permission_classes = (IsAuthenticated,)
-    queryset = Group.objects.all()
-    serializer_class = JoinGroupSerializer
 
 class UserSearchView(generics.RetrieveAPIView):
     """

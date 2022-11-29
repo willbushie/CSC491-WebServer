@@ -44,7 +44,7 @@ class Group(models.Model):
     # end is set by finding (start + duration)
     end = models.DateField(auto_now=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
-    join_link = models.URLField(default=f"http://www.photoshare.com/groups/join/") # this needs to be auto generated in some fasion
+    join_link = models.URLField(default="") # this needs to be auto generated in some fasion
 
     def __str__(self):
         return self.name

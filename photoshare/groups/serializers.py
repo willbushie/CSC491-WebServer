@@ -89,7 +89,7 @@ class CreateGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ('name', 'active', 'duration', 'start', 'end', 'admin', 'join_link')
+        fields = ('id', 'name', 'active', 'duration', 'start', 'end', 'admin', 'join_link')
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True}
@@ -103,16 +103,11 @@ class CreateGroupSerializer(serializers.ModelSerializer):
             name=validated_data['name'],
             #active=validated_data[''],
             #duration=validated_data[''],
+            #start=validated_data[''],
             #end=validated_data[''],
             admin=validated_data['admin'],
-            join_link=""
+            join_link="",
         )
-        group.join_link = f"http://www.photoshare.com/groups/join/{group.pk}/"
+        group.join_link = f"http://www.photoshare.com/groups/{group.pk}/"
         group.save()
         return group
-
-class JoinGroupSerializer(serializers.ModelSerializer):
-    """
-    
-    """
-    pass
