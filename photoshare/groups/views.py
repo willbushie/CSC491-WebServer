@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .serializers import GroupSerializer, UserSerializer, FileSerializer, SessionSerializer, ListSerializer, CreateGroupSerializer
+from .serializers import GroupSerializer, UserSerializer, FileSerializer, SessionSerializer, ListSerializer, CreateGroupSerializer, CreateSessionSerializer, UpdateSessionSerializer
 from .models import Group, User, File, Session, List
 from rest_framework import generics
 
@@ -103,6 +103,9 @@ class SessionViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
+        """
+        Queries the database and obtains sessions based on group id.
+        """
         queryset = Session.objects.all()
         session = get_object_or_404(queryset, pk=pk)
         serializer = SessionSerializer(session)
@@ -139,6 +142,24 @@ class CreateGroupView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Group.objects.all()
     serializer_class = CreateGroupSerializer
+
+class CreateSessionView(generics.CreateAPIView):
+    """
+    ### Create Session View
+
+    """
+    permission_classes = (IsAuthenticated,)
+    queryset = Session.objects.all()
+    serializer_class = CreateSessionSerializer
+
+class UpdateSessionView(generics.UpdateAPIView):
+    ""
+    ### Update Session View
+
+    ""
+    permission_classes = (IsAuthenticated,)
+    queryset = Session.objects.all()
+    serializer_class = UpdateSessionSerializer
 
 class UserSearchView(generics.RetrieveAPIView):
     """

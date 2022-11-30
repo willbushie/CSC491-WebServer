@@ -30,7 +30,7 @@ LAST MODIFIED: 2022-11-22 by William Bushie
 # imports
 from django.contrib import admin
 from django.urls import include, path
-from groups.views import GroupViewSet, UserViewSet, FileViewSet, SessionViewSet, ListViewSet
+from groups.views import GroupViewSet, UserViewSet, FileViewSet, ListViewSet, SessionViewSet 
 from rest_framework.routers import DefaultRouter
 
 # creating router

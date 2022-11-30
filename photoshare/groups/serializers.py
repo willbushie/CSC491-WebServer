@@ -46,10 +46,11 @@ class SessionSerializer(serializers.ModelSerializer):
     - pk
     - group
     - user
+    - active
     """
     class Meta:
         model = Session
-        fields = ['pk', 'group', 'user']
+        fields = ['pk', 'group', 'user', 'active']
 
 class FileSerializer(serializers.ModelSerializer):
     """
@@ -108,6 +109,50 @@ class CreateGroupSerializer(serializers.ModelSerializer):
             admin=validated_data['admin'],
             join_link="",
         )
+        # this link is not used in the android application
         group.join_link = f"http://www.photoshare.com/groups/{group.pk}/"
         group.save()
         return group
+
+class CreateSessionSerializer(serializers.ModelSerializer):
+    """
+    ### Session Creation Serializer
+
+    """
+
+    class Meta:
+        model = Session
+        fields = ('id', 'group', 'user', 'active')
+
+    def create(self, validated_data):
+        """
+        Create a Session event.
+        """
+        session = Session.objects.create(
+            group=validated_data['group'],
+            user=validated_data['user'],
+            active=validated_data['active'],
+        )
+        session.save()
+        return session
+
+class UpdateSessionSerializer(serializers.ModelSerializer):
+    """
+    ### Session Update Serializer
+    THIS NEEDS TO BE RESOLVED SO ACTIVE CAN BE MODIFIED
+
+    """
+
+    class Meta:
+        model = Session
+        fields = ('id', 'group', 'user', 'active')
+
+    def update(self, validated_data):
+        """
+        Update a Session with a new active value.
+        """
+        session = Session.objects.update(
+            active=validated_data['active'],
+        )
+        #session.save()
+        return session

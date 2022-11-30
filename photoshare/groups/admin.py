@@ -22,7 +22,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'group', 'user')
+    list_display = ('pk', 'group', 'user', 'active')
     #list_filter = ('group', 'user', )
 
 @admin.register(File)

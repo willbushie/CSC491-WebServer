@@ -55,11 +55,13 @@ class Session(models.Model):
     Sessions are used to keep track of which users are in which groups
     - group (ForeignKey): ID of the group in which the user is participating. 
     - user (ForeignKey): ID of the user participating in the group.
+    - acitve (BooleanField): If the user is currenlty in the group or not. 
 
     Note: (session) ID is an included field.
     """
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
 
 class File(models.Model):
     """
