@@ -40,9 +40,9 @@ class Group(models.Model):
     active = models.BooleanField(default=False)
     duration = models.DurationField(default=timedelta(hours=1))
     # start is set for when the group is started
-    start = models.DateField(auto_now=True)
+    start = models.DateTimeField(auto_now=True)
     # end is set by finding (start + duration)
-    end = models.DateField(auto_now=True)
+    end = models.DateTimeField(auto_now=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
     join_link = models.URLField(default="") # this needs to be auto generated in some fasion
 
@@ -55,12 +55,14 @@ class Session(models.Model):
     Sessions are used to keep track of which users are in which groups
     - group (ForeignKey): ID of the group in which the user is participating. 
     - user (ForeignKey): ID of the user participating in the group.
+    - ip (GenericIPAddressField): IP address of the user in the session.
     - acitve (BooleanField): If the user is currenlty in the group or not. 
 
     Note: (session) ID is an included field.
     """
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ip = models.GenericIPAddressField(default='0.0.0.0')
     active = models.BooleanField(default=True)
 
 class File(models.Model):
@@ -82,7 +84,7 @@ class File(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     # obtained through the application
-    created = models.DateField(default="2022-12-31")
+    created = models.DateTimeField(auto_now=True)
     #size = models.
 
 class List(models.Model):

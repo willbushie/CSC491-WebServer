@@ -29,11 +29,12 @@ LAST MODIFIED: 2022-11-22 by William Bushie
 
 # imports
 from django.urls import path
-from .views import CreateGroupView, UserSearchView, CreateSessionView, UpdateSessionView
+from .views import CreateGroupView, UserSearchView, CreateSessionView, PartialUpdateSessionView, SessionListSearch
 
 urlpatterns = [
     path('create/', CreateGroupView.as_view(), name='create_group'),
     path('user/', UserSearchView.as_view(), name='user_search'),
     path('sessions/create/', CreateSessionView.as_view(), name='create_session'),
-    path('sessions/update/', UpdateSessionView.as_view(), name='update_session'),
+    path('sessions/update/<int:pk>/', PartialUpdateSessionView.as_view(), name='update_session'),
+    path('sessions/<int:group>/', SessionListSearch.as_view(), name='session_search'),
 ]

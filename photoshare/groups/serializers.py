@@ -46,11 +46,12 @@ class SessionSerializer(serializers.ModelSerializer):
     - pk
     - group
     - user
+    - ip
     - active
     """
     class Meta:
         model = Session
-        fields = ['pk', 'group', 'user', 'active']
+        fields = ['pk', 'group', 'user', 'ip', 'active']
 
 class FileSerializer(serializers.ModelSerializer):
     """
@@ -122,7 +123,7 @@ class CreateSessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Session
-        fields = ('id', 'group', 'user', 'active')
+        fields = ('id', 'group', 'user', 'ip', 'active')
 
     def create(self, validated_data):
         """
@@ -131,6 +132,7 @@ class CreateSessionSerializer(serializers.ModelSerializer):
         session = Session.objects.create(
             group=validated_data['group'],
             user=validated_data['user'],
+            ip=validated_data['ip'],
             active=validated_data['active'],
         )
         session.save()
@@ -139,13 +141,12 @@ class CreateSessionSerializer(serializers.ModelSerializer):
 class UpdateSessionSerializer(serializers.ModelSerializer):
     """
     ### Session Update Serializer
-    THIS NEEDS TO BE RESOLVED SO ACTIVE CAN BE MODIFIED
 
     """
 
     class Meta:
         model = Session
-        fields = ('id', 'group', 'user', 'active')
+        fields = ('ip', 'active')
 
     def update(self, validated_data):
         """
@@ -153,6 +154,6 @@ class UpdateSessionSerializer(serializers.ModelSerializer):
         """
         session = Session.objects.update(
             active=validated_data['active'],
+            ip=validated_data['ip']
         )
-        #session.save()
         return session

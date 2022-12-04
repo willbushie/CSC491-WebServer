@@ -67,6 +67,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
+            #print("fields did not match")
             raise serializers.ValidationError({"password": "Password fields didn't match."})
 
         return attrs
@@ -74,6 +75,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
+            #print("old password is incorrect")
             raise serializers.ValidationError({"old_password": "Old password is not correct"})
         return value
 
@@ -81,6 +83,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
 
         if user.pk != instance.pk:
+            #print("permission denied")
             raise serializers.ValidationError({'authorize':'Permission Denied'})
         
         instance.set_password(validated_data['password'])

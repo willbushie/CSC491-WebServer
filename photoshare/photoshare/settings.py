@@ -37,7 +37,7 @@ SECRET_KEY = "django-insecure-g0@-k63dc@==s(lv7kg^sp7e@$3oxl3p+6$3h!==_q*am5j5&x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.1.123','0.0.0.0']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.1.126','0.0.0.0']
 
 
 # Application definition
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_filters",
     'rest_framework_simplejwt.token_blacklist',
     "rest_framework",
     "groups",
@@ -61,6 +62,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 # JWT Items

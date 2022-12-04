@@ -16,6 +16,8 @@ from rest_framework.response import Response
 from .serializers import GroupSerializer, UserSerializer, FileSerializer, SessionSerializer, ListSerializer, CreateGroupSerializer, CreateSessionSerializer, UpdateSessionSerializer
 from .models import Group, User, File, Session, List
 from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.mixins import UpdateModelMixin
 
 class GroupViewSet(viewsets.ViewSet):
     """
@@ -93,9 +95,12 @@ class SessionViewSet(viewsets.ViewSet):
     - retrieve (GET): Obtains a specified session (based on pk) from the database.
 
     """
-    serializer_class = SessionSerializer
     queryset = Session.objects.all()
+    serializer_class = SessionSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user', 'group']
     permission_classes = [IsAuthenticated]
+
 
     def list(self, request):
         queryset = Session.objects.all()
@@ -152,15 +157,6 @@ class CreateSessionView(generics.CreateAPIView):
     queryset = Session.objects.all()
     serializer_class = CreateSessionSerializer
 
-class UpdateSessionView(generics.UpdateAPIView):
-    ""
-    ### Update Session View
-
-    ""
-    permission_classes = (IsAuthenticated,)
-    queryset = Session.objects.all()
-    serializer_class = UpdateSessionSerializer
-
 class UserSearchView(generics.RetrieveAPIView):
     """
     ### User Search View
@@ -174,3 +170,27 @@ class UserSearchView(generics.RetrieveAPIView):
     def retrieve(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+class PartialUpdateSessionView(generics.GenericAPIView, UpdateModelMixin):
+    ""
+    ### Update Session View
+
+    ""
+    permission_classes = (IsAuthenticated,)
+    queryset = Session.objects.all()
+    serializer_class = UpdateSessionSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+
+class SessionListSearch(generics.ListAPIView):
+    # Search the sessions given group id (user is )
+    queryset = Session.objects.all()
+    serializer_class = SessionSerializer
+    permission_classes = (IsAuthenticated, )
+    
+    def get_queryset(self):
+        user = self.request.user
+        group = self.kwargs['group']
+        return Session.objects.filter(user=user,group=group)
